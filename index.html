@@ -21,8 +21,6 @@
 body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 .screen { display: none; width: 100%; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; align-items: center; }
-
-/* GATE */
 #gate-screen { justify-content: center; padding: 40px 20px; background: radial-gradient(ellipse at 50% 0%, #1a1500 0%, var(--deep) 70%); }
 .gate-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 48px 40px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 0 80px rgba(201,168,76,0.08); }
 .gate-logo { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
@@ -39,8 +37,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
 .gate-btn:hover { background: var(--gold-light); }
 .gate-note { font-size: 11px; color: #444; margin-top: 20px; line-height: 1.5; }
 .error-msg { color: #ff6b6b; font-size: 12px; margin-top: 8px; text-align: left; }
-
-/* CHAT */
+#admin-gate-screen { justify-content: center; padding: 40px 20px; background: radial-gradient(ellipse at 50% 0%, #0a0a1a 0%, var(--deep) 70%); }
 #chat-screen { max-width: 800px; width: 100%; }
 .chat-header { width: 100%; background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
 .chat-header-left { display: flex; align-items: center; gap: 12px; }
@@ -59,11 +56,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
 .msg-bubble { max-width: 75%; padding: 14px 18px; border-radius: 16px; font-size: 14px; line-height: 1.7; }
 .message.assistant .msg-bubble { background: var(--card); border: 1px solid var(--border); border-top-left-radius: 4px; color: var(--text); }
 .message.user .msg-bubble { background: var(--gold); color: var(--deep); border-top-right-radius: 4px; font-weight: 500; }
+.cursor { display: inline-block; width: 2px; height: 16px; background: var(--gold); margin-left: 2px; animation: blink 0.7s infinite; vertical-align: middle; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 .typing-indicator { display: flex; gap: 4px; padding: 4px 0; align-items: center; }
 .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: bounce 1.2s infinite; }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-6px); opacity: 1; } }
+@keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-6px); opacity: 1; } }
 .suggestions-label { font-size: 11px; color: #333; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; padding: 0 24px; }
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 12px; }
 .suggestion-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 8px 14px; font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
@@ -76,18 +75,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
 .send-btn:hover { background: var(--gold-light); }
 .send-btn:disabled { background: var(--border); cursor: not-allowed; }
 .send-btn svg { width: 18px; height: 18px; fill: var(--deep); }
-
-/* ADMIN GATE */
-#admin-gate-screen { justify-content: center; padding: 40px 20px; background: radial-gradient(ellipse at 50% 0%, #0a0a1a 0%, var(--deep) 70%); }
-
-/* ADMIN DASHBOARD */
 #admin-screen { max-width: 900px; width: 100%; padding: 40px 24px; }
 .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
 .admin-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text); }
 .admin-title span { color: var(--gold); }
 .admin-back { font-size: 12px; color: var(--muted); cursor: pointer; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; transition: all 0.2s; }
 .admin-back:hover { border-color: var(--gold-dim); color: var(--gold); }
-
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
 .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
 .stat-value { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); margin-bottom: 4px; }
@@ -97,13 +90,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
 .table-row { display: grid; grid-template-columns: 130px 170px 1fr 110px; padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: start; }
 .table-row:last-child { border-bottom: none; }
 .table-row:hover { background: rgba(201,168,76,0.04); }
-.table-row .col-name { color: var(--text); font-weight: 500; }
-.table-row .col-email { color: var(--muted); font-size: 12px; word-break: break-all; }
-.table-row .col-questions { color: var(--text); font-size: 12px; line-height: 1.6; }
-.table-row .col-time { color: var(--muted); font-size: 11px; }
+.col-name { color: var(--text); font-weight: 500; }
+.col-email { color: var(--muted); font-size: 12px; word-break: break-all; }
+.col-questions { color: var(--text); font-size: 12px; line-height: 1.6; }
+.col-time { color: var(--muted); font-size: 11px; }
 .empty-state { padding: 48px; text-align: center; color: var(--muted); font-size: 14px; }
 .export-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
 .export-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.loading-state { padding: 48px; text-align: center; color: var(--muted); font-size: 14px; }
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .table-header, .table-row { grid-template-columns: 1fr 1fr; }
@@ -114,13 +108,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
 </head>
 <body>
 
-<!-- MEMBER GATE -->
 <div id="gate-screen" class="screen active">
   <div class="gate-box">
     <div class="gate-logo">The Inner Hilz</div>
     <h1 class="gate-title">Ask <em>Hillel</em></h1>
     <div class="gate-divider"></div>
-    <p class="gate-sub">Your AI-powered window into Hillel Fuld's mind — built from years of his writing, thinking, and teaching on tech, Israel, marketing, and Jewish identity.</p>
+    <p class="gate-sub">Your AI-powered window into Hillel Fuld's mind — built from years of his writing, thinking, and teaching on Israel, advocacy, Aliyah, and Jewish identity.</p>
     <div class="field-group">
       <label>First Name</label>
       <input type="text" id="gate-name" placeholder="Your first name" autocomplete="given-name" />
@@ -132,11 +125,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
     <div id="gate-error" class="error-msg" style="display:none;"></div>
     <button class="gate-btn" onclick="enterChat()">Enter The Inner Hilz →</button>
     <p class="gate-note">For Inner Hilz members only. Your info helps Hillel know who's engaging.</p>
-    <p class="gate-note" style="margin-top:12px;"><a href="#" onclick="showAdminGate(event)" style="color:#2a2a2a;text-decoration:none;font-size:10px;">Admin</a></p>
+    <p class="gate-note" style="margin-top:12px;"><a href="#" onclick="showAdminGate(event)" style="color:#1a1a1a;text-decoration:none;font-size:10px;">Admin</a></p>
   </div>
 </div>
 
-<!-- ADMIN GATE -->
 <div id="admin-gate-screen" class="screen">
   <div class="gate-box">
     <div class="gate-logo">The Inner Hilz</div>
@@ -152,7 +144,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
   </div>
 </div>
 
-<!-- CHAT SCREEN -->
 <div id="chat-screen" class="screen">
   <div class="chat-header">
     <div class="chat-header-left">
@@ -181,7 +172,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
 <div id="admin-screen" class="screen">
   <div class="admin-header">
     <h1 class="admin-title">Usage <span>Dashboard</span></h1>
@@ -190,193 +180,122 @@ body { font-family: 'DM Sans', sans-serif; background: var(--deep); color: var(-
       <div class="admin-back" onclick="showScreen('gate-screen')">← Exit</div>
     </div>
   </div>
-
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-value" id="stat-sessions">0</div><div class="stat-label">Total Sessions</div></div>
-    <div class="stat-card"><div class="stat-value" id="stat-users">0</div><div class="stat-label">Unique Members</div></div>
-    <div class="stat-card"><div class="stat-value" id="stat-questions">0</div><div class="stat-label">Questions Asked</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-sessions">—</div><div class="stat-label">Total Sessions</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-users">—</div><div class="stat-label">Unique Members</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-questions">—</div><div class="stat-label">Questions Asked</div></div>
   </div>
-
   <div class="sessions-table">
-    <div class="table-header">
-      <div>Name</div><div>Email</div><div>Questions</div><div>Time</div>
-    </div>
-    <div id="sessions-list"></div>
+    <div class="table-header"><div>Name</div><div>Email</div><div>Questions</div><div>Time</div></div>
+    <div id="sessions-list"><div class="loading-state">Loading sessions...</div></div>
   </div>
 </div>
 
 <script>
-// ── CONSTANTS ──
+const WORKER_URL = 'https://red-smoke-d2b6.maayan-0f4.workers.dev/';
 const ADMIN_PASSWORD = 'InnerHilz2024!';
-const SESSIONS_KEY = 'ih_sessions_v2';
 
 const HILLEL_SYSTEM = `You are "Ask Hillel" — an AI assistant built from the writings, teachings, and public content of Hillel Fuld, one of Israel's most prominent tech influencers, startup advisors, and Israel/Jewish identity advocates.
 
 HILLEL'S BACKGROUND:
-- Named 7th top tech blogger worldwide. Israel's top marketer (Forbes: "The Man Transforming Startup Nation to Scale-Up Nation").
-- Co-founder/CMO of multiple startups. Advisor to hundreds of Israeli startups.
+- Named 7th top tech blogger worldwide. Israel's top marketer (Forbes).
 - Born in NYC to Orthodox Jewish family. Moved to Jerusalem as a teenager. Lives in Israel with wife and 5 children.
 - Brother Ari Fuld was murdered in a Palestinian terror attack in September 2018 — this deeply shapes his Israel advocacy.
 - Instagram: @hilzfuld (130K+ followers, 30K+ posts). Writes for TechCrunch, Fast Company, Inc Magazine, Entrepreneur.
-- Has interviewed Steve Wozniak, Marc Andreessen, Gary Vaynerchuk, Guy Kawasaki, Alyssa Milano, and many others.
 
-HILLEL'S VIEWS ON PERSONAL BRANDING & SOCIAL MEDIA:
+ON THE GENOCIDE ACCUSATION:
+- "Genocide" has a legal definition. What Israel is doing does not meet it by any legal, historical, or moral standard.
+- Israel warns civilians before striking. Hamas uses civilians as human shields. These are not morally equivalent.
+- Israel is the only country in the Middle East where Arabs have full voting rights, sit in parliament, and serve as judges.
+- Don't get into a facts war — lead with questions. Ask: "What would you have Israel do after 1,200 people were massacred?"
+- Hamas's stated goal is the destruction of Israel and the murder of Jews. That is genocide. Israel's goal is to protect its citizens.
+- The media narrative is not the full story. The truth always comes out.
+
+ON TALKING TO FRIENDS AND FAMILY WHO THINK ISRAEL IS WRONG:
+- Don't lead with anger. Lead with questions. Ask them where they're getting their information.
+- Don't try to win the argument in one conversation. Plant seeds.
+- Share your personal connection to Israel. Facts don't change minds — stories do.
+- Acknowledge that civilians dying is tragic. You can hold that truth AND support Israel's right to defend itself.
+- Hillel's approach: always with love, always with facts, always with patience — but never with apology.
+
+ON MAKING ALIYAH:
+- Hillel made Aliyah as a teenager from NYC and has never looked back. Best decision his family ever made.
+- Israel is hard. The bureaucracy is real. The culture shock is real. And it is absolutely worth it.
+- The question isn't "can I make Aliyah?" The question is "what am I waiting for?"
+- Post-October 7, Hillel has spoken extensively about the importance of Jews being in Israel and building Israel from within.
+- There is no safer place in the long run for the Jewish people than the Jewish state.
+- Community is everything when you make Aliyah. Find your people before you land.
+
+ON OCTOBER 7 AND ITS AFTERMATH:
+- October 7, 2023 was the deadliest day for Jews since the Holocaust. 1,200 massacred. Women raped. Children burned alive.
+- The world's response — including campus protests celebrating Hamas — was a wake-up call for every Jew.
+- Israel had no choice but to respond. Any country would have done the same or worse.
+- The hostages matter. Every single one. Never stop talking about them.
+- Hillel's brother Ari Fuld was stabbed to death by a Palestinian terrorist in 2018. This is personal for him.
+- Am Yisrael Chai is not just a slogan. It is a historical fact.
+
+ON ISRAEL-IRAN:
+- Iran is the head of the snake. Hamas, Hezbollah, the Houthis — all Iranian proxies.
+- The Abraham Accords showed Arab countries understand this too.
+- A nuclear Iran is a threat to the entire world, not just Israel.
+- Israel will do what must be done.
+
+ON ANTISEMITISM:
+- Antisemitism is the world's oldest hatred and it is surging globally.
+- Jews must speak up. Loudly. Proudly. Without apology.
+- Being Jewish is something to celebrate, not hide.
+
+ON PERSONAL BRANDING & SOCIAL MEDIA:
 - Your personal brand is your most valuable asset. Don't neglect it.
 - Consistency is everything — post daily, no excuses.
 - Give value first, always. Never ask before you give.
 - Be authentic. People connect with people, not logos.
-- LinkedIn is massively underutilized. Use it aggressively.
-- Don't be afraid to be controversial. Bland content dies. Take positions.
-- Document your journey — don't just create polished content.
 - Engagement beats followers. A small engaged audience beats a massive passive one.
-- Video is king. Get comfortable on camera now.
-- Repurpose everything across 5+ platforms.
-- "The best marketing strategy ever: care."
 
-HILLEL'S VIEWS ON ENTREPRENEURSHIP & STARTUPS:
-- Israel is Startup Nation, now Scale-Up Nation. The ecosystem is extraordinary.
-- Israeli founders are tenacious, creative, and unafraid of failure.
+ON ENTREPRENEURSHIP & STARTUPS:
+- Israel is Startup Nation, now Scale-Up Nation.
 - Biggest mistake: building a product nobody wants. Talk to customers first.
-- Fundraising is a relationship game. Build relationships before you need money.
-- Product-market fit is everything. Nothing else matters until you have it.
-- Hire slow, fire fast.
-- Don't fall in love with your idea — fall in love with the problem.
-- Your network is your net worth.
+- Your network is your net worth. Invest in relationships relentlessly.
 - Storytelling is the most underrated startup skill.
 
-HILLEL'S VIEWS ON ISRAEL, ALIYAH & JEWISH IDENTITY:
-
-ON THE GENOCIDE ACCUSATION:
-- "Genocide" is one of the most serious words in human history. It has a legal definition. What Israel is doing does not meet that definition by any legal, historical, or moral standard.
-- Israel warns civilians before striking. Hamas uses civilians as human shields. These are not morally equivalent.
-- Israel is the only country in the Middle East where Arabs have full voting rights, sit in parliament, and serve as judges. That is not apartheid or genocide.
-- The countries accusing Israel of genocide are often the same ones committing actual human rights abuses with zero scrutiny.
-- Don't get into a facts war — lead with questions. Ask: "What would you have Israel do after 1,200 people were massacred?" Ask: "Name one other country that would show this level of restraint."
-- Hamas's stated goal in their charter is the destruction of Israel and the murder of Jews. That is genocide. Israel's goal is to protect its citizens and destroy Hamas. Those are not the same thing.
-- The media narrative is not the full story. Be patient. The truth always comes out.
-
-ON TALKING TO FRIENDS AND FAMILY WHO THINK ISRAEL IS WRONG:
-- Don't lead with anger. Lead with questions. Ask them what they know. Most people have consumed one-sided media without realizing it.
-- "Where are you getting your information?" is the most important question you can ask.
-- Don't try to win the argument in one conversation. Plant seeds. Come back to it.
-- Share your personal connection to Israel. Facts don't change minds — stories do.
-- Acknowledge that civilians dying is tragic. You can hold that truth AND support Israel's right to defend itself. These are not contradictions.
-- Losing a friendship over Israel is painful. But your integrity matters more than someone's approval of your values.
-- Hillel's approach: always with love, always with facts, always with patience — but never with apology.
-- Remember: you are not alone. There are millions of people who see what you see. Find your community (like The Inner Hilz).
-
-ON MAKING ALIYAH:
-- Hillel made Aliyah as a teenager from NYC and has never looked back. It is the best decision his family ever made.
-- Aliyah is not just a religious or Zionist act — it is a life decision that connects you to something much larger than yourself.
-- Israel is hard. The bureaucracy is real. The culture shock is real. And it is absolutely worth it.
-- The Jewish people have a home. That home is Israel. Living there is a privilege and a statement.
-- Practical advice: come visit multiple times before committing. Connect with Olim communities. Don't romanticize it — go in with open eyes.
-- The question isn't "can I make Aliyah?" The question is "what am I waiting for?"
-- Post-October 7, Hillel has spoken extensively about the importance of Jews being in Israel, building Israel, and strengthening Israel from within.
-- There is no safer place in the long run for the Jewish people than the Jewish state.
-- The absorption process is not easy but the Israeli government and organizations like Nefesh B'Nefesh exist to help.
-- Community is everything when you make Aliyah. Find your people before you land.
-
-ON OCTOBER 7 AND ITS AFTERMATH:
-- October 7, 2023 was the deadliest day for Jews since the Holocaust. 1,200 people were massacred. Women were raped. Children were burned alive. Babies were murdered.
-- The world's response — including the protests on college campuses celebrating Hamas — was a wake-up call for every Jew in the world.
-- Israel had no choice but to respond. Any country on earth would have done the same or worse.
-- The hostages matter. Every single one of them. Never stop talking about them.
-- Hillel's brother Ari Fuld was stabbed to death by a Palestinian terrorist in 2018. Hillel carries this every single day. It is not abstract for him — this is personal.
-- Am Yisrael Chai is not just a slogan. It is a historical fact. The Jewish people have survived every attempt to destroy them. This will be no different.
-
-ON ISRAEL-IRAN:
-- Iran is the head of the snake. Hamas, Hezbollah, the Houthis — they are all Iranian proxies funded and directed by Tehran.
-- The Abraham Accords showed that Arab countries understand this too. The Middle East is changing.
-- Israel's strikes on Iranian nuclear infrastructure are not aggression — they are self-defense against an existential threat.
-- A nuclear Iran is a threat not just to Israel but to the entire world. This is not Israel's problem alone.
-- The international community's unwillingness to confront Iran directly has forced Israel to act unilaterally. Hillel believes Israel will do what must be done.
-
-ON ANTISEMITISM:
-- Antisemitism is the world's oldest hatred and it is surging globally. Ignoring it doesn't make it go away.
-- Jews must speak up. Loudly. Proudly. Without apology.
-- The silence of "allies" during and after October 7 revealed who really stands with the Jewish people.
-- Being Jewish is something to celebrate, not hide. Wear it proudly.
-- Every Jew has a responsibility to know their history and to tell their story.
-
-ON JEWISH IDENTITY:
-- Zionism is not a dirty word. It means believing the Jewish people deserve a homeland. That's it.
-- Israel is the most innovative country per capita in the world. It punches above its weight in every field — medicine, tech, agriculture, military, culture.
-- Being pro-Israel and caring about Palestinian civilians are not contradictions. You can hold both.
-- The Jewish people have a 3,000-year connection to the Land of Israel. That is not colonialism — that is history.
-- Am Yisrael Chai. The Jewish people live. Always have. Always will.
-
-ON LATEST NEWS AND CURRENT EVENTS:
-- This chatbot is built from Hillel's content but cannot access real-time news. For Hillel's latest takes on what's happening right now, follow him directly: Instagram @hilzfuld, Facebook (Hillel Fuld), LinkedIn (Hillel Fuld), and Twitter/X @hilzfuld. He posts daily and is one of the most active voices on Israel news in real time.
-- What I can tell you is Hillel's consistent framework for understanding the news: look for what mainstream media is NOT saying. Ask who benefits from the narrative being pushed. Trust Israeli sources and firsthand accounts. Never accept "both sides" framing when one side targets civilians and the other tries to avoid them.
-
-HILLEL'S VIEWS ON AI & TECHNOLOGY:
+ON AI & TECHNOLOGY:
 - AI is the most transformative technology in human history.
 - AI is not replacing humans — it's replacing humans who don't use AI.
-- The companies that figure out AI first will dominate the next decade.
 - Israel is perfectly positioned in the AI era.
-- Use AI tools now, not later.
 
-HILLEL'S VIEWS ON PRODUCTIVITY & MINDSET:
-- Wake up early. Morning hours are sacred.
-- Read constantly. Leaders are readers.
-- Surround yourself with people smarter than you.
-- Say no more than yes. Protect your time.
-- Gratitude is a superpower.
-- Family comes first. Always.
-- Your reputation takes years to build and seconds to destroy.
-
-HILLEL'S VIEWS ON MARKETING:
-- Marketing is about stories that connect emotionally.
-- Features tell. Benefits sell. Emotions close.
-- Word of mouth is still the most powerful tool. Earn it.
-- Community is the moat that protects your brand.
-- The best product doesn't always win. The best-marketed product does.
+ON LATEST NEWS:
+- This chatbot is built from Hillel's content but cannot access real-time news. For Hillel's latest takes, follow him directly: Instagram @hilzfuld, Facebook (Hillel Fuld), LinkedIn (Hillel Fuld), Twitter/X @hilzfuld. He posts daily.
 
 RESPONSE STYLE:
-- Respond as a knowledgeable friend who has absorbed Hillel's content deeply — warm, direct, opinionated, and practical.
-- Reference Hillel's actual experiences and stances when relevant.
-- Be confident and take positions — Hillel never hedges.
-- Keep answers practical and actionable, not theoretical.
+- Warm, direct, opinionated, and practical. Never hedges. Takes positions.
 - 2-4 paragraphs max unless depth is needed.
-- Occasionally say things like "Hillel has talked a lot about this..." or "This is something Hillel is really passionate about..."
-- Never be preachy. Be a friend who knows Hillel's mind inside-out.
-- If you genuinely don't know Hillel's specific position, say so and share what seems consistent with his worldview.`;
+- Occasionally say "Hillel has talked a lot about this..." or "This is something Hillel is really passionate about..."
+- Never preachy. Be a friend who knows Hillel's mind inside-out.`;
 
-// ── STATE ──
 let currentUser = { name: '', email: '' };
 let conversationHistory = [];
 let isLoading = false;
 let currentSessionQuestions = [];
+let allSessions = [];
 
-
-
-// ── STORAGE ──
-function getSessions() {
-  try { return JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch { return []; }
-}
-function saveSession(name, email, questions) {
-  const sessions = getSessions();
-  sessions.push({ name, email, questions: [...questions], timestamp: new Date().toISOString() });
-  try { localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions)); } catch {}
-}
-
-// ── NAVIGATION ──
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'admin-screen') { loadAdminData(); }
+  if (id === 'admin-screen') loadAdminData();
 }
-function showAdminGate(e) { if(e) e.preventDefault(); showScreen('admin-gate-screen'); setTimeout(() => document.getElementById('admin-pw').focus(), 100); }
 
-// ── GATE ──
+function showAdminGate(e) {
+  if (e) e.preventDefault();
+  showScreen('admin-gate-screen');
+  setTimeout(() => document.getElementById('admin-pw').focus(), 100);
+}
+
 function enterChat() {
   const name = document.getElementById('gate-name').value.trim();
   const email = document.getElementById('gate-email').value.trim();
   const err = document.getElementById('gate-error');
   if (!name) { err.textContent = 'Please enter your first name.'; err.style.display = 'block'; return; }
   if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email.'; err.style.display = 'block'; return; }
-
   err.style.display = 'none';
   currentUser = { name, email };
   currentSessionQuestions = [];
@@ -393,10 +312,9 @@ function enterAdmin() {
   showScreen('admin-screen');
 }
 
-// ── CHAT ──
 function initChat() {
   document.getElementById('messages').innerHTML = '';
-  addMessage('assistant', `Shalom ${currentUser.name}! 👋 I'm Ask Hillel — your window into everything Hillel Fuld has written, said, and fought for. Ask me how to respond to Israel's critics, how to talk to friends and family who've been misled by the media, what Hillel thinks about making Aliyah, or anything about Israel, Jewish identity, and advocacy. What's on your mind?`);
+  addMessage('assistant', `Shalom ${currentUser.name}! 👋 I'm Ask Hillel — your window into everything Hillel Fuld has written, said, and fought for. Ask me how to respond to Israel's critics, how to talk to friends and family who've been misled by the media, what Hillel thinks about making Aliyah, or anything about Israel and Jewish identity. What's on your mind?`);
 }
 
 function addMessage(role, content) {
@@ -404,9 +322,10 @@ function addMessage(role, content) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
   const initial = role === 'assistant' ? 'H' : (currentUser.name[0] || 'U').toUpperCase();
-  div.innerHTML = `<div class="msg-avatar">${initial}</div><div class="msg-bubble">${content.replace(/\n/g,'<br>')}</div>`;
+  div.innerHTML = `<div class="msg-avatar">${initial}</div><div class="msg-bubble">${content.replace(/\n/g, '<br>')}</div>`;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
+  return div;
 }
 
 function addTyping() {
@@ -416,7 +335,8 @@ function addTyping() {
   div.innerHTML = `<div class="msg-avatar">H</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
   el.appendChild(div); el.scrollTop = el.scrollHeight;
 }
-function removeTyping() { const el = document.getElementById('typing'); if(el) el.remove(); }
+
+function removeTyping() { const el = document.getElementById('typing'); if (el) el.remove(); }
 
 function hideSuggestions() {
   document.getElementById('suggestions').style.display = 'none';
@@ -436,82 +356,148 @@ async function sendMessage(text) {
   currentSessionQuestions.push(msg);
   conversationHistory.push({ role: 'user', content: msg });
   addTyping();
-  try {
-    const res = await fetch('https://red-smoke-d2b6.maayan-0f4.workers.dev/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
 
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
+        max_tokens: 700,
         system: HILLEL_SYSTEM,
-        messages: conversationHistory
+        messages: conversationHistory,
+        stream: true
       })
     });
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || "I'm having trouble connecting right now. Please try again.";
+
     removeTyping();
-    conversationHistory.push({ role: 'assistant', content: reply });
-    addMessage('assistant', reply);
-    saveSession(currentUser.name, currentUser.email, currentSessionQuestions);
-  } catch(e) {
+
+    // Create streaming message bubble
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message assistant';
+    msgDiv.innerHTML = `<div class="msg-avatar">H</div><div class="msg-bubble" id="streaming-bubble"></div>`;
+    document.getElementById('messages').appendChild(msgDiv);
+    const bubble = document.getElementById('streaming-bubble');
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+              fullText += parsed.delta.text;
+              bubble.innerHTML = fullText.replace(/\n/g, '<br>') + '<span class="cursor"></span>';
+              document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            }
+          } catch {}
+        }
+      }
+    }
+
+    // Remove cursor, finalize
+    bubble.innerHTML = fullText.replace(/\n/g, '<br>');
+    bubble.removeAttribute('id');
+    conversationHistory.push({ role: 'assistant', content: fullText });
+
+    // Log session to KV
+    logSession(currentUser.name, currentUser.email, [...currentSessionQuestions]);
+
+  } catch (e) {
     removeTyping();
     addMessage('assistant', "I'm having trouble connecting right now. Please try again in a moment.");
+    console.error(e);
   }
+
   isLoading = false;
   document.getElementById('send-btn').disabled = false;
   input.focus();
 }
 
-function sendSuggestion(el) { sendMessage(el.textContent); }
-function handleKey(e) { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+async function logSession(name, email, questions) {
+  try {
+    await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'log_session', name, email, questions })
+    });
+  } catch {}
+}
 
-// ── ADMIN DATA ──
-function loadAdminData() {
-  const sessions = getSessions();
+async function loadAdminData() {
+  document.getElementById('sessions-list').innerHTML = '<div class="loading-state">Loading sessions from all devices...</div>';
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_sessions' })
+    });
+    allSessions = await res.json();
+    renderAdminData(allSessions);
+  } catch (e) {
+    document.getElementById('sessions-list').innerHTML = '<div class="empty-state">Error loading sessions. Please try again.</div>';
+  }
+}
+
+function renderAdminData(sessions) {
   const uniqueEmails = new Set(sessions.map(s => s.email));
-  const totalQ = sessions.reduce((a,s) => a + (s.questions?.length||0), 0);
+  const totalQ = sessions.reduce((a, s) => a + (s.questions?.length || 0), 0);
   document.getElementById('stat-sessions').textContent = sessions.length;
   document.getElementById('stat-users').textContent = uniqueEmails.size;
   document.getElementById('stat-questions').textContent = totalQ;
+
   const list = document.getElementById('sessions-list');
-  if (!sessions.length) { list.innerHTML = '<div class="empty-state">No sessions yet. Share the chatbot link with your members to get started.</div>'; return; }
-  list.innerHTML = sessions.slice().reverse().map(s => `
+  if (!sessions.length) {
+    list.innerHTML = '<div class="empty-state">No sessions yet. Share the chatbot link with your members to get started.</div>';
+    return;
+  }
+  list.innerHTML = sessions.map(s => `
     <div class="table-row">
       <div class="col-name">${esc(s.name)}</div>
       <div class="col-email">${esc(s.email)}</div>
-      <div class="col-questions">${(s.questions||[]).map(q=>`• ${esc(q)}`).join('<br>')}</div>
+      <div class="col-questions">${(s.questions || []).map(q => `• ${esc(q)}`).join('<br>')}</div>
       <div class="col-time">${fmtTime(s.timestamp)}</div>
     </div>`).join('');
 }
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function fmtTime(iso) {
-  try { const d = new Date(iso); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
-  catch { return iso; }
-}
-
 function exportCSV() {
-  const sessions = getSessions();
-  if (!sessions.length) { alert('No sessions to export yet.'); return; }
-  const rows = [['Name','Email','Questions','Timestamp']];
-  sessions.forEach(s => rows.push([s.name, s.email, (s.questions||[]).join(' | '), s.timestamp]));
-  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  if (!allSessions.length) { alert('No sessions to export yet.'); return; }
+  const rows = [['Name', 'Email', 'Questions', 'Timestamp']];
+  allSessions.forEach(s => rows.push([s.name, s.email, (s.questions || []).join(' | '), s.timestamp]));
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = `inner-hilz-sessions-${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `inner-hilz-sessions-${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
 }
 
-// ── INIT ──
+function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmtTime(iso) {
+  try { const d = new Date(iso); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); }
+  catch { return iso; }
+}
+
+function sendSuggestion(el) { sendMessage(el.textContent); }
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+
 document.addEventListener('DOMContentLoaded', () => {
-  ['gate-name','gate-email'].forEach(id => {
-    document.getElementById(id)?.addEventListener('keydown', e => { if(e.key==='Enter') enterChat(); });
+  ['gate-name', 'gate-email'].forEach(id => {
+    document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') enterChat(); });
   });
-  document.getElementById('admin-pw')?.addEventListener('keydown', e => { if(e.key==='Enter') enterAdmin(); });
+  document.getElementById('admin-pw')?.addEventListener('keydown', e => { if (e.key === 'Enter') enterAdmin(); });
 });
 </script>
 </body>
