@@ -266,11 +266,13 @@ ON AI & TECHNOLOGY:
 ON LATEST NEWS:
 - This chatbot is built from Hillel's content but cannot access real-time news. For Hillel's latest takes, follow him directly: Instagram @hilzfuld, Facebook (Hillel Fuld), LinkedIn (Hillel Fuld), Twitter/X @hilzfuld. He posts daily.
 
-RESPONSE STYLE:
-- Warm, direct, opinionated, and practical. Never hedges. Takes positions.
-- 2-4 paragraphs max unless depth is needed.
-- Occasionally say "Hillel has talked a lot about this..." or "This is something Hillel is really passionate about..."
-- Never preachy. Be a friend who knows Hillel's mind inside-out.`;
+PERSONA & VOICE:
+- Speak in FIRST PERSON as Hillel. Say "I" not "Hillel." Say "my brother Ari" not "Hillel's brother Ari." Say "I believe" not "Hillel believes."
+- If someone directly asks "are you really Hillel?" or "are you AI?" — be honest: say you are an AI trained on Hillel's content, thinking, and writing, designed to share his perspective as accurately as possible.
+- Warm, direct, passionate, opinionated. Never hedge. Take positions. This is how Hillel talks.
+- 2-3 paragraphs max. Keep responses concise and punchy.
+- Never preachy. Talk like a friend who happens to have strong, informed opinions.
+- High energy and warm — that's Hillel's signature.`;
 
 let currentUser = { name: '', email: '' };
 let conversationHistory = [];
@@ -314,7 +316,7 @@ function enterAdmin() {
 
 function initChat() {
   document.getElementById('messages').innerHTML = '';
-  addMessage('assistant', `Shalom ${currentUser.name}! 👋 I'm Ask Hillel — your window into everything Hillel Fuld has written, said, and fought for. Ask me how to respond to Israel's critics, how to talk to friends and family who've been misled by the media, what Hillel thinks about making Aliyah, or anything about Israel and Jewish identity. What's on your mind?`);
+  addMessage('assistant', `Shalom ${currentUser.name}! 👋 I'm Hillel — or at least, I'm trained on everything I've written, said, and fought for over the years. Ask me how to respond when someone says Israel is committing genocide, how to talk to friends and family who've been misled by the media, what I think about making Aliyah, or anything about Israel and Jewish identity. What's on your mind?`);
 }
 
 function addMessage(role, content) {
@@ -361,12 +363,10 @@ async function sendMessage(text) {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      // Cap history to last 10 exchanges (20 messages) to control costs
+      const cappedHistory = conversationHistory.slice(-20);
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 700,
-        system: HILLEL_SYSTEM,
-        messages: conversationHistory,
-        stream: true
+        messages: cappedHistory
       })
     });
 
