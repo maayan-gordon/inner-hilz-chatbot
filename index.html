@@ -978,6 +978,10 @@ body {
   .modal-stats { grid-template-columns: 1fr 1fr; }
   #admin-screen { padding: 24px 16px 40px; }
 }
+
+.date-filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; letter-spacing: 0.5px; }
+.date-filter-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.date-filter-btn.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1065,7 +1069,20 @@ body {
     <div class="admin-actions">
       <button class="btn-secondary" onclick="loadAdminData()">↻ Refresh</button>
       <button class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+      <button class="btn-secondary" onclick="confirmClearData()" style="color:#EF9A9A;border-color:rgba(239,154,154,0.3);">🗑 Clear Data</button>
       <button class="btn-secondary" onclick="showScreen('gate-screen')">← Exit</button>
+    </div>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim);">Filter</span>
+    <button class="date-filter-btn active" id="filter-all" onclick="setDateFilter('all',this)">All Time</button>
+    <button class="date-filter-btn" id="filter-today" onclick="setDateFilter('today',this)">Today</button>
+    <button class="date-filter-btn" id="filter-7" onclick="setDateFilter('7days',this)">Last 7 Days</button>
+    <button class="date-filter-btn" id="filter-30" onclick="setDateFilter('30days',this)">Last 30 Days</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+      <input type="date" id="date-from" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-family:Outfit,sans-serif;font-size:12px;outline:none;" onchange="setDateFilter('custom',null)">
+      <span style="color:var(--muted);font-size:12px;">to</span>
+      <input type="date" id="date-to" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-family:Outfit,sans-serif;font-size:12px;outline:none;" onchange="setDateFilter('custom',null)">
     </div>
   </div>
 
@@ -1305,9 +1322,7 @@ async function loadAdminData() {
     });
     allSessions = await res.json();
     buildUserMap();
-    renderStats();
-    renderTopUsers();
-    renderSessionsTable();
+    renderAll(allSessions);
   } catch (e) {
     document.getElementById('sessions-list').innerHTML = '<div class="empty-state">Error loading. Please try again.</div>';
   }
@@ -1464,6 +1479,80 @@ function showUserDetail(email) {
 
 function closeModal(e) {
   if (e.target.id === 'user-modal') document.getElementById('user-modal').classList.remove('open');
+}
+
+let currentDateFilter = 'all';
+
+function setDateFilter(filter, btn) {
+  currentDateFilter = filter;
+  document.querySelectorAll('.date-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (allSessions.length) renderAll(allSessions);
+}
+
+function getFilteredSessions(sessions) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (currentDateFilter === 'today') return sessions.filter(s => new Date(s.timestamp) >= today);
+  if (currentDateFilter === '7days') { const d = new Date(today); d.setDate(d.getDate()-7); return sessions.filter(s => new Date(s.timestamp) >= d); }
+  if (currentDateFilter === '30days') { const d = new Date(today); d.setDate(d.getDate()-30); return sessions.filter(s => new Date(s.timestamp) >= d); }
+  if (currentDateFilter === 'custom') {
+    const from = document.getElementById('date-from').value;
+    const to = document.getElementById('date-to').value;
+    return sessions.filter(s => {
+      const t = new Date(s.timestamp);
+      if (from && t < new Date(from)) return false;
+      if (to && t > new Date(to + 'T23:59:59')) return false;
+      return true;
+    });
+  }
+  return sessions;
+}
+
+function renderAll(sessions) {
+  const filtered = getFilteredSessions(sessions);
+  // Rebuild userMap from filtered
+  const fm = {};
+  filtered.forEach(s => {
+    const k = s.email?.toLowerCase();
+    if (!fm[k]) fm[k] = { name: s.name, email: s.email, sessions: [], totalQuestions: 0, firstSeen: s.timestamp, lastSeen: s.timestamp };
+    fm[k].sessions.push(s);
+    fm[k].totalQuestions += (s.questions||[]).length;
+    if (s.timestamp > fm[k].lastSeen) fm[k].lastSeen = s.timestamp;
+    if (s.timestamp < fm[k].firstSeen) fm[k].firstSeen = s.timestamp;
+  });
+  const uniqueEmails = Object.keys(fm);
+  const totalQ = filtered.reduce((a,s) => a + (s.questions?.length||0), 0);
+  const avgQ = filtered.length ? (totalQ/filtered.length).toFixed(1) : 0;
+  document.getElementById('stat-sessions').textContent = filtered.length;
+  document.getElementById('stat-users').textContent = uniqueEmails.length;
+  document.getElementById('stat-questions').textContent = totalQ;
+  document.getElementById('stat-avg').textContent = avgQ;
+  // Top users
+  const topUsers = Object.values(fm).sort((a,b) => b.totalQuestions - a.totalQuestions).slice(0,6);
+  const topGrid = document.getElementById('top-users-grid');
+  if (!topUsers.length) { topGrid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:24px;">No users in this period.</div>'; }
+  else { topGrid.innerHTML = topUsers.map((u,i) => { const cost=calcCost(u.totalQuestions); const months=calcMonths(u.firstSeen,u.lastSeen); const revenue=months*MONTHLY_PRICE; const profit=revenue-cost; const margin=revenue>0?Math.round((profit/revenue)*100):0; const pc=profitClass(margin); return `<div class="top-user-card" onclick="showUserDetail('${u.email}')"><div class="top-user-rank">${i+1}</div><div class="top-user-name">${esc(u.name)}</div><div class="top-user-email">${esc(u.email)}</div><div class="top-user-stats"><div class="top-user-stat"><div class="top-user-stat-val">${u.totalQuestions}</div><div class="top-user-stat-label">Questions</div></div><div class="top-user-stat"><div class="top-user-stat-val">${u.sessions.length}</div><div class="top-user-stat-label">Sessions</div></div></div><div class="profit-badge ${pc}">${margin}% margin</div></div>`; }).join(''); }
+  // Sessions table
+  const list = document.getElementById('sessions-list');
+  if (!filtered.length) { list.innerHTML = '<div class="empty-state">No sessions in this period.</div>'; return; }
+  list.innerHTML = filtered.map(s => { const k=s.email?.toLowerCase(); const userSessions=fm[k]?.sessions.length||1; const qs=s.questions||[]; const preview=qs.slice(0,2).map(q=>`• ${esc(q.slice(0,60))}${q.length>60?'...':''}`).join('<br>'); const more=qs.length>2?`<br><span style="color:var(--muted);font-size:11px;">+${qs.length-2} more</span>`:''; return `<div class="table-row" onclick="showUserDetail('${esc(s.email)}')"><div class="col-name">${esc(s.name)}</div><div class="col-email">${esc(s.email)}</div><div class="col-questions">${preview}${more}</div><div class="col-sessions">${userSessions}</div><div class="col-time">${fmtTime(s.timestamp)}</div></div>`; }).join('');
+}
+
+function confirmClearData() {
+  const pw = prompt('Enter admin password to confirm:');
+  if (pw !== 'InnerHilz2024!') { alert('Incorrect password.'); return; }
+  if (!confirm('Permanently delete all session data?')) return;
+  clearAllData();
+}
+
+async function clearAllData() {
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'clear_sessions' }) });
+    const data = await res.json();
+    if (data.ok) { allSessions = []; userMap = {}; renderAll([]); alert('All session data cleared.'); }
+    else alert('Error: ' + (data.error||'Unknown'));
+  } catch(e) { alert('Error clearing data.'); }
 }
 
 function exportCSV() {
